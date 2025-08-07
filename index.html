@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Betel Leaf Prediction AI</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+  <style>
+    body { margin:0; font-family: 'Segoe UI', Tahoma, sans-serif; background:#ecf4ee; }
+    header { background:#006400; color:white; padding:20px; font-size:30px; text-align:center; }
+    nav { display:flex; background:#228B22; }
+    nav a { flex:1; padding:15px; color:white; text-decoration:none; text-align:center; cursor:pointer; }
+    nav a:hover { background:#16661b; }
+    section { display:none; padding:20px; }
+    section.active { display:block; }
+    h2 { color:#006400; }
+    ul { line-height:1.6; }
+  </style>
+</head>
+<body>
+
+<header>Betel Leaf Prediction AI</header>
+<nav>
+  <a onclick="openTab('home')">About Leaf</a>
+  <a onclick="openTab('dataset')">Dataset & Diseases</a>
+  <a onclick="openTab('predict')">Prediction</a>
+  <a onclick="openTab('aboutus')">About Us</a>
+</nav>
+
+<section id="home" class="active">
+  <h2>About Betel Leaf</h2>
+  <p>Betel leaf (<i>Piper betle</i>) is an aromatic, heart-shaped leaf used widely in Asia. Diseases strongly affect its commercial value — hence realtime detection helps farmers prevent losses.</p>
+</section>
+
+<section id="dataset">
+  <h2>Dataset & Disease Types</h2>
+  <p>Dataset: <b>Kaggle – Betel Leaf Disease Classification</b></p>
+  <ul>
+    <li><b>Anthracnose_Green</b> – fungal necrotic lesions</li>
+    <li><b>BacterialLeafSpot_Green</b> – bacterial water-soaked spots</li>
+    <li><b>Healthy_Green</b> – disease-free green leaf</li>
+    <li><b>Healthy_Red</b> – normal red variety leaf</li>
+  </ul>
+</section>
+
+<section id="predict">
+  <h2>Disease Prediction</h2>
+
+  <h3>Upload Image Prediction</h3>
+  <input type="file" id="uploadInput" accept="image/*"><br><br>
+  <img id="previewImg" width="250" style="display:none;">
+  <h4 id="uploadResult">Upload Prediction: --</h4>
+  <hr>
+  <h3>Realtime Webcam Prediction</h3>
+  <video id="webcam" width="350" height="260" autoplay playsinline></video>
+  <h4 id="liveResult">Live Prediction: --</h4>
+</section>
+
+<section id="aboutus">
+  <h2>About Us</h2>
+  <p>We are Mechatronics students working on AI-based agricultural solutions to support farmers through realtime smart tools.</p>
+</section>
+
+<script src="script.js"></script>
+<script>
+function openTab(tab) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+}
+</script>
+</body>
+</html>
+
