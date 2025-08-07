@@ -1,18 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Betel Leaf Classifier</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+    <meta charset="UTF-8">
+    <title>Betel Leaf Disease Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #d4fc79, #96e6a1);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1f4037;
+            margin-top: 50px;
+        }
+
+        input[type="file"] {
+            margin: 20px;
+        }
+
+        #preview {
+            margin-top: 20px;
+            max-width: 300px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #0f2027;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            background-color: #1f4037;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2f6e4b;
+        }
+    </style>
 </head>
 <body>
-  <h1>Upload a Betel Leaf Image</h1>
-  <input type="file" id="imageUpload" />
-  <br /><br />
-  <img id="preview" width="224" />
-  <p id="result">Prediction: ...</p>
+    <h1>🍃 Betel Leaf Disease Detection</h1>
 
-  <script src="script.js"></script>
+    <div>
+        <input type="file" accept="image/*" onchange="previewImage(event)">
+        <br>
+        <img id="preview" />
+    </div>
+
+    <button onclick="predict()">🔍 Predict</button>
+
+    <p id="status">⏳ Loading model...</p>
+    <p id="result"></p>
 </body>
 </html>
+
 
 
