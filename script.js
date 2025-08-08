@@ -1,47 +1,57 @@
 let model;
 
+const MODEL_URL = 'model/model.json';
+
 async function loadModel() {
-    try {
-        model = await tf.loadLayersModel('model/model.json');
-        console.log("✅ Model loaded successfully!");
-        document.getElementById("status").innerText = "✅ Model loaded successfully!";
-    } catch (err) {
-        console.error("❌ Failed to load the model:", err);
-        document.getElementById("status").innerText = "❌ Failed to load the model.";
-    }
+  try {
+    model = await tf.loadLayersModel(MODEL_URL);
+    console.log("✅ Model loaded successfully.");
+  } catch (error) {
+    console.error("❌ Failed to load the model:", error);
+  }
 }
 
 loadModel();
 
-function predict() {
-    const img = document.getElementById('preview');
-    if (!model) {
-        alert("Model not loaded yet. Please wait.");
-        return;
-    }
+document.getElementById("imageUpload").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-    const tensor = tf.browser.fromPixels(img)
-        .resizeNearestNeighbor([224, 224])
-        .toFloat()
-        .div(tf.scalar(255.0))
-        .expandDims();
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = document.getElementById("preview");
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
-    const prediction = model.predict(tensor);
-    prediction.array().then(probabilities => {
-        const classes = ['Anthracnose Green', 'BacterialLeafSpot Green', 'Healthy Green', 'Healthy Red'];
-        const top = probabilities[0].map((p, i) => ({ className: classes[i], prob: p }))
-                                   .sort((a, b) => b.prob - a.prob)[0];
-        document.getElementById('result').innerText = `🟢 Prediction: ${top.className} (${(top.prob * 100).toFixed(2)}%)`;
-    });
+async function predict() {
+  if (!model) {
+    alert("Model not loaded yet. Please wait...");
+    return;
+  }
+
+  const imageElement = document.getElementById("preview");
+
+  if (!imageElement.src || imageElement.src === window.location.href) {
+    alert("Please upload an image first.");
+    return;
+  }
+
+  const tensor = tf.browser.fromPixels(imageElement)
+    .resizeNearestNeighbor([224, 224])
+    .toFloat()
+    .div(tf.scalar(255.0))
+    .expandDims();
+
+  const prediction = model.predict(tensor);
+  const predictedClass = prediction.argMax(-1);
+  const classIndex = (await predictedClass.data())[0];
+
+  const classNames = ["Class A", "Class B", "Class C"]; // Replace with your actual class labels
+  const label = classNames[classIndex] || `Class ${classIndex}`;
+
+  document.getElementById("prediction").textContent = `Prediction: ${label}`;
 }
 
-function previewImage(event) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const output = document.getElementById('preview');
-        output.src = reader.result;
-        output.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
 
